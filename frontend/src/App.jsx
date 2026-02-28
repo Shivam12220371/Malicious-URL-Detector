@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
-const DEFAULT_API = "http://localhost:8000/predict";
+// Use environment variable for API endpoint (production vs local)
+const DEFAULT_API = import.meta.env.VITE_API_URL || "http://localhost:8000/predict";
 
 const sampleChecks = [
   "https://github.com",
