@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import joblib
@@ -15,13 +16,20 @@ MODEL_PATH = Path(__file__).with_name("model.pkl")
 VECTORIZER_PATH = Path(__file__).with_name("vectorizer.pkl")
 
 app = FastAPI(title="Malicious URL Detector", version="1.0.0")
+
+# Add extra origins via env (comma-separated), e.g. CORS_ALLOWED_ORIGINS="https://mydomain.com,https://app.example.com"
+extra_origins = [o.strip() for o in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://malicious-url-detector-six.vercel.app/"  # Replace with actual URL
-    ],
+        "https://malicious-url-detector-six.vercel.app",
+        "https://malicious-url-detector-1fur.onrender.com",
+    ] + extra_origins,
+    # Allow local dev dynamic ports + Vercel preview/production links
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1):\d+$|https://([a-zA-Z0-9-]+)\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -72,7 +80,6 @@ def predict_url(payload: URLRequest) -> URLResponse:
         risk_score=risk_score,
     )
 
-import os
 import uvicorn
 
 if __name__ == "__main__":
