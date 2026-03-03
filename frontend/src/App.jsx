@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 // Use environment variable for API endpoint (production vs local)
-const DEFAULT_API = import.meta.env.VITE_API_URL || "https://malicious-url-detector-1fur.onrender.com/predict";
+const DEFAULT_API = import.meta.env.VITE_API_URL || "https://malicious-url-detector-1fur.onrender.com";
 
 const sampleChecks = [
   "https://github.com",
