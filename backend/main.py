@@ -71,3 +71,10 @@ def predict_url(payload: URLRequest) -> URLResponse:
         confidence=round(float(max(proba, 1 - proba)) * 100, 2),
         risk_score=risk_score,
     )
+
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
